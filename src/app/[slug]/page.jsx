@@ -5,7 +5,12 @@ import { notFound } from "next/navigation";
 
 const RastaurantPage = async ({ params }) => {
   const { slug } = await params;
-  const restaurant = await db.restaurant.findUnique({ where: { slug } });
+  const restaurant = await db.restaurant.findUnique({ 
+    where: { slug },
+    include: {
+      menuCategories: true
+    }
+  });
   if (!restaurant) {
     return notFound();
   }
