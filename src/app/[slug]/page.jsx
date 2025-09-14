@@ -5,18 +5,18 @@ import { notFound } from "next/navigation";
 
 const RastaurantPage = async ({ params }) => {
   const { slug } = await params;
-  const restaurant = await db.restaurant.findUnique({ 
+  const restaurant = await db.restaurant.findUnique({
     where: { slug },
     include: {
-      menuCategories: true
-    }
+      menuCategories: true,
+    },
   });
   if (!restaurant) {
     return notFound();
   }
   return (
-    <div className="flex h-screen flex-col items-center justify-center px-6 pt-24">
-      <div className="flex flex-col items-center justify-center gap-2">
+    <div className="flex flex-col items-center justify-center px-6">
+      <div className="mt-10 flex flex-col items-center justify-center gap-2">
         <Image
           src={restaurant?.avatarImageUrl}
           alt={restaurant?.name}
@@ -27,14 +27,14 @@ const RastaurantPage = async ({ params }) => {
           {restaurant?.name}
         </h2>
       </div>
-      <div className="space-y-2 pt-24 text-center">
+      <div className="space-y-2 pt-10 text-center">
         <h3 className="text-2xl font-semibold">Seja bem-vindo!</h3>
         <p className="opacity-55">
           Escolha como prefere aproveitar sua refeição. Estamos aqui para
           oferecer praticidade e sabor em cada detalhe!
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-4 pt-14">
+      <div className="grid grid-cols-2 gap-4 pt-10">
         <ConsumptionMethodOption
           imageUrl="/dane_in.png"
           imageAlt="Para comer aqui"

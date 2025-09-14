@@ -12,8 +12,8 @@ const ConsumptionMethodOption = ({
 }) => {
   return (
     <Card>
-      <CardContent className="flex flex-col items-center gap-8 py-8">
-        <div className="relative h-[80px] w-[80px]">
+      <CardContent className="flex flex-col items-center gap-4 py-4">
+        <div className="relative h-[60px] w-[60px]">
           <Image
             src={imageUrl}
             fill
