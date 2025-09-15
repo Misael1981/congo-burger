@@ -11,7 +11,7 @@ import { CartContext } from "../../../contexts/cart";
 import CartSheet from "../../../components/CartSheet";
 
 const ProductDetails = ({ product, restaurant }) => {
-  const { toggleCart } = useContext(CartContext);
+  const { toggleCart, addProduct } = useContext(CartContext);
   const [quantity, setQuantity] = useState(0);
   const handleDrecrement = () => {
     setQuantity((prevQuantity) => {
@@ -25,6 +25,10 @@ const ProductDetails = ({ product, restaurant }) => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
   const handleAddToCart = () => {
+    addProduct({
+      ...product,
+      quantity,
+    });
     toggleCart();
   };
   return (
