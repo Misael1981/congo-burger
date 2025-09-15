@@ -39,6 +39,37 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const decreaserProductQuantity = (productId) => {
+    setProducts((prevProducts) => {
+      return prevProducts.map((prevProduct) => {
+        if (prevProduct.id !== productId) {
+          return prevProduct;
+        }
+        if (prevProduct.quantity === 1) {
+          return prevProduct;
+        }
+        return {
+          ...prevProduct,
+          quantity: prevProduct.quantity - 1,
+        };
+      });
+    });
+  };
+
+  const increaseProductQuantity = (productId) => {
+    setProducts((prevProducts) => {
+      return prevProducts.map((prevProduct) => {
+        if (prevProduct.id !== productId) {
+          return prevProduct;
+        }
+        return {
+          ...prevProduct,
+          quantity: prevProduct.quantity + 1,
+        };
+      });
+    });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -46,6 +77,8 @@ export const CartProvider = ({ children }) => {
         products,
         toggleCart,
         addProduct,
+        decreaserProductQuantity,
+        increaseProductQuantity,
       }}
     >
       {children}
