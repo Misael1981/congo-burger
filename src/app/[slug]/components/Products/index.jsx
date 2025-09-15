@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 const Products = ({ products }) => {
   const { slug } = useParams();
+  const searchParams = useSearchParams();
+  const consumptionMethod = searchParams.get("consumptionMethod");
   return (
     <div className="space-y-3 p-4">
       {products.map((product) => (
         <Link
-          href={`/${slug}/menu/${product.id}`}
+          href={`/${slug}/menu/${product.id}?consumptionMethod=${consumptionMethod}`}
           key={product.id}
           className="flex items-center justify-between gap-10 border-b py-3"
         >

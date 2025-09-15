@@ -25,6 +25,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PatternFormat } from "react-number-format";
+import { createOrder } from "../../actions/create-order";
+import { useParams, useSearchParams } from "next/navigation";
+import { CartContext } from "../../contexts/cart";
+import { useContext, useTransition } from "react";
+import { toast } from "sonner";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -42,6 +48,11 @@ const formSchema = z.object({
 });
 
 const FinishOrderDialog = ({ open, onOpenChange }) => {
+  const searchParams = useSearchParams();
+  const { products } = useContext(CartContext);
+  const { slug } = useParams();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,8 +62,29 @@ const FinishOrderDialog = ({ open, onOpenChange }) => {
     shouldUnregister: true,
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const consumptionMethod = searchParams.get("consumptionMethod");
+      startTransition(async () => {
+        await createOrder({
+          consumptionMethod,
+          customerCpf: data.cpf,
+          customerName: data.name,
+          products,
+          slug,
+        });
+        // Mostrar o toast ANTES de fechar o dialog
+        toast.success("Pedido finalizado com sucesso!");
+
+        // Pequeno delay para garantir que o toast apareça antes de fechar
+        setTimeout(() => {
+          onOpenChange(false);
+        }, 100);
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro ao finalizar pedido. Tente novamente.");
+    }
   };
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
@@ -82,7 +114,7 @@ const FinishOrderDialog = ({ open, onOpenChange }) => {
               />
               <FormField
                 control={form.control}
-                name="name"
+                name="cpf"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Seu CPF</FormLabel>
@@ -104,8 +136,10 @@ const FinishOrderDialog = ({ open, onOpenChange }) => {
                   type="submit"
                   variant="destructive"
                   className="rounded-full"
+                  disabled={isPending}
                 >
-                  Submit
+                  {isPending && <Loader2Icon className="animate-spin" />}
+                  Finalizar pedido
                 </Button>
                 <DrawerClose asChild>
                   <Button variant="default" className="w-full rounded-full">
