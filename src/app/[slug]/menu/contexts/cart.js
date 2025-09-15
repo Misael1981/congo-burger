@@ -13,6 +13,10 @@ export const CartProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
+  const total = products.reduce((acc, product) => {
+    return acc + product.price * product.quantity;
+  }, 0);
+
   const toggleCart = () => {
     setIsOpen((prev) => !prev);
   };
@@ -70,6 +74,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const removeProduct = (productId) => {
+    setProducts((prevProducts) => {
+      return prevProducts.filter((prevProduct) => prevProduct.id !== productId);
+    });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -79,6 +89,8 @@ export const CartProvider = ({ children }) => {
         addProduct,
         decreaserProductQuantity,
         increaseProductQuantity,
+        removeProduct,
+        total,
       }}
     >
       {children}
