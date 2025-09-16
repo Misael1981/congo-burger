@@ -53,7 +53,9 @@ export const createOrder = async (input) => {
 
   // revalidatePath(`/${input.slug}/orders`);
 
-  redirect(`/${input.slug}/orders`);
+  redirect(
+    `/${input.slug}/orders?cpf=${removeCpfPunctuation(input.customerCpf)}`,
+  );
 
   return order;
 };

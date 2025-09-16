@@ -4,9 +4,14 @@ import { createContext, useState } from "react";
 
 export const CartContext = createContext({
   isOpen: false,
+  total: 0,
+  totalQuantity: 0,
   products: [],
   toggleCart: () => {},
   addProduct: () => {},
+  decreaseProductQuantity: () => {},
+  increaseProductQuantity: () => {},
+  removeProduct: () => {},
 });
 
 export const CartProvider = ({ children }) => {
@@ -15,6 +20,10 @@ export const CartProvider = ({ children }) => {
 
   const total = products.reduce((acc, product) => {
     return acc + product.price * product.quantity;
+  }, 0);
+
+  const totalQuantaty = products.reduce((acc, product) => {
+    return acc + product.quantity;
   }, 0);
 
   const toggleCart = () => {
@@ -90,6 +99,7 @@ export const CartProvider = ({ children }) => {
         decreaserProductQuantity,
         increaseProductQuantity,
         removeProduct,
+        totalQuantaty,
         total,
       }}
     >
